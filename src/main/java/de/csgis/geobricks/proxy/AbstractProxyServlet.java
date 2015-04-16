@@ -2,7 +2,6 @@ package de.csgis.geobricks.proxy;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +30,7 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	public static final String PROP_HEADER_NAME = "de.csgis.geobricks.login.header_name";
 	public static final String PROP_PROXY_URL = "de.csgis.geobricks.login.proxy_url";
 
-	private ConfigReader config;
+	protected ConfigReader config;
 
 	@Override
 	public void init() throws ServletException {
@@ -41,10 +40,6 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 		} catch (IOException e) {
 			throw new ServletException(e);
 		}
-	}
-
-	protected Properties getAppProperties() {
-		return config.getAppProperties();
 	}
 
 	/**
