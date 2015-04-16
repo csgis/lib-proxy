@@ -1,7 +1,5 @@
 package de.csgis.geobricks.proxy;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Properties;
@@ -10,10 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jetty.proxy.ProxyServlet;
 
-import de.csgis.geobricks.Geobricks;
+import de.csgis.geobricks.servlet.ConfigReader;
 
 /**
  * Reverse proxy for GeoServer requests.
@@ -31,30 +28,32 @@ import de.csgis.geobricks.Geobricks;
  * @author vicgonco
  */
 public abstract class AbstractProxyServlet extends ProxyServlet {
-	private static final Logger logger = Logger
-			.getLogger(AbstractProxyServlet.class);
-
 	public static final String PROP_HEADER_NAME = "de.csgis.geobricks.login.header_name";
 	public static final String PROP_PROXY_URL = "de.csgis.geobricks.login.proxy_url";
 
-	private Properties config;
+	private ConfigReader config;
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
-
 		try {
-			config = new Properties();
-			// Increase buffer size for both request and response to 64k
-			getHttpClient().setRequestBufferSize(64 * 1024);
-			getHttpClient().setResponseBufferSize(64 * 1024);
-			File conf = new File(getServletContext().getAttribute(
-					Geobricks.ATTR_CONF_DIR).toString(), "app.properties");
-			config.load(new FileInputStream(conf));
+			config = new ConfigReader(getServletContext());
 		} catch (IOException e) {
-			logger.error("Cannot read app.properties file");
 			throw new ServletException(e);
 		}
+	}
+
+	protected Properties getAppProperties() {
+		return config.getAppProperties();
+	}
+
+	/**
+	 * Only for testing purposes.
+	 * 
+	 * @param appProperties
+	 */
+	void setAppProperties(ConfigReader appProperties) {
+		this.config = appProperties;
 	}
 
 	@Override
@@ -70,17 +69,15 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 
 			ConfigurableHttpServletRequest wrapper = new ConfigurableHttpServletRequest(
 					req);
-			wrapper.addHeader(getConfig().getProperty(PROP_HEADER_NAME), user);
+			wrapper.addHeader(
+					config.getAppProperties().getProperty(PROP_HEADER_NAME),
+					user);
 			modifyRequest(wrapper, resp);
 
 			doReverseProxy(wrapper, resp);
 		} else {
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
-	}
-
-	Properties getConfig() {
-		return config;
 	}
 
 	/**
@@ -98,8 +95,8 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 
 	@Override
 	protected URI rewriteURI(HttpServletRequest request) {
-		return URI.create(getConfig().getProperty(PROP_PROXY_URL) + "?"
-				+ request.getQueryString());
+		return URI.create(config.getAppProperties().getProperty(PROP_PROXY_URL)
+				+ "?" + request.getQueryString());
 	}
 
 	protected abstract String getAuthorizedUser(HttpServletRequest request,
