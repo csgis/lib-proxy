@@ -19,7 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import de.csgis.geobricks.servlet.ConfigReader;
+import de.csgis.geobricks.servlet.Config;
 
 public class AbstractProxyServletTest {
 	private AbstractProxyServlet servlet;
@@ -65,7 +65,7 @@ public class AbstractProxyServletTest {
 
 		Properties properties = new Properties();
 		properties.put(AbstractProxyServlet.PROP_HEADER_NAME, headerName);
-		ConfigReader config = mock(ConfigReader.class);
+		Config config = mock(Config.class);
 		when(config.getAppProperties()).thenReturn(properties);
 
 		when(servlet.getAuthorizedUser(request, response)).thenReturn(user);

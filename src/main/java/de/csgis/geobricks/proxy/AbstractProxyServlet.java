@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.proxy.ProxyServlet;
 
-import de.csgis.geobricks.servlet.ConfigReader;
+import de.csgis.geobricks.servlet.Config;
 
 /**
  * Reverse proxy for GeoServer requests.
@@ -30,13 +30,14 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	public static final String PROP_HEADER_NAME = "de.csgis.geobricks.login.header_name";
 	public static final String PROP_PROXY_URL = "de.csgis.geobricks.login.proxy_url";
 
-	protected ConfigReader config;
+	protected Config config;
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
 		try {
-			config = new ConfigReader(getServletContext());
+			config = new Config();
+			config.init(getServletContext());
 		} catch (IOException e) {
 			throw new ServletException(e);
 		}
@@ -47,7 +48,7 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	 * 
 	 * @param appProperties
 	 */
-	void setAppProperties(ConfigReader appProperties) {
+	void setAppProperties(Config appProperties) {
 		this.config = appProperties;
 	}
 
