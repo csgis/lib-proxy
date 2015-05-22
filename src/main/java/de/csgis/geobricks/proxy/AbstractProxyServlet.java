@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.proxy.ProxyServlet;
 
+import de.csgis.geobricks.Geobricks;
 import de.csgis.geobricks.servlet.Config;
 
 /**
@@ -35,12 +36,8 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		try {
-			config = new Config();
-			config.init(getServletContext());
-		} catch (IOException e) {
-			throw new ServletException(e);
-		}
+		config = (Config) getServletContext().getAttribute(
+				Geobricks.ATTR_CONFIG);
 	}
 
 	/**
