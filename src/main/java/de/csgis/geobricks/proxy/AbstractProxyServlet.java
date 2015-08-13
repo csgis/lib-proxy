@@ -2,15 +2,13 @@ package de.csgis.geobricks.proxy;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.proxy.ProxyServlet;
-
-import de.csgis.geobricks.Geobricks;
-import de.csgis.geobricks.servlet.Config;
 
 /**
  * Reverse proxy for GeoServer requests.
@@ -31,24 +29,6 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	public static final String PROP_HEADER_NAME = "de.csgis.geobricks.login.header_name";
 	public static final String PROP_PROXY_URL = "de.csgis.geobricks.login.proxy_url";
 
-	protected Config config;
-
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		config = (Config) getServletContext().getAttribute(
-				Geobricks.ATTR_CONFIG);
-	}
-
-	/**
-	 * Only for testing purposes.
-	 * 
-	 * @param appProperties
-	 */
-	void setAppProperties(Config appProperties) {
-		this.config = appProperties;
-	}
-
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -62,8 +42,7 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 
 			ConfigurableHttpServletRequest wrapper = new ConfigurableHttpServletRequest(
 					req);
-			wrapper.addHeader(
-					config.getAppProperties().getProperty(PROP_HEADER_NAME),
+			wrapper.addHeader(getAppProperties().getProperty(PROP_HEADER_NAME),
 					user);
 			modifyRequest(wrapper, resp);
 
@@ -88,9 +67,11 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 
 	@Override
 	protected URI rewriteURI(HttpServletRequest request) {
-		return URI.create(config.getAppProperties().getProperty(PROP_PROXY_URL)
-				+ "?" + request.getQueryString());
+		return URI.create(getAppProperties().getProperty(PROP_PROXY_URL) + "?"
+				+ request.getQueryString());
 	}
+
+	protected abstract Properties getAppProperties();
 
 	protected abstract String getAuthorizedUser(HttpServletRequest request,
 			HttpServletResponse response) throws IOException;

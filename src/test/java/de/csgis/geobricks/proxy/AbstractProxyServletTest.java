@@ -19,8 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
-import de.csgis.geobricks.servlet.Config;
-
 public class AbstractProxyServletTest {
 	private AbstractProxyServlet servlet;
 
@@ -38,6 +36,11 @@ public class AbstractProxyServletTest {
 			protected void modifyRequest(
 					ConfigurableHttpServletRequest request,
 					HttpServletResponse response) throws IOException {
+			}
+
+			@Override
+			protected Properties getAppProperties() {
+				return new Properties();
 			}
 		});
 
@@ -65,11 +68,9 @@ public class AbstractProxyServletTest {
 
 		Properties properties = new Properties();
 		properties.put(AbstractProxyServlet.PROP_HEADER_NAME, headerName);
-		Config config = mock(Config.class);
-		when(config.getAppProperties()).thenReturn(properties);
 
 		when(servlet.getAuthorizedUser(request, response)).thenReturn(user);
-		servlet.setAppProperties(config);
+		when(servlet.getAppProperties()).thenReturn(properties);
 
 		servlet.service(request, response);
 
