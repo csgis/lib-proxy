@@ -87,7 +87,7 @@ public class ConfigurableHttpServletRequest extends HttpServletRequestWrapper {
 				ret.put(superParam, superParams.get(superParam));
 			}
 		}
-		return super.getParameterMap();
+		return ret;
 	}
 
 	@Override
@@ -106,11 +106,6 @@ public class ConfigurableHttpServletRequest extends HttpServletRequestWrapper {
 		} else {
 			return super.getParameter(name);
 		}
-	}
-
-	@Override
-	public StringBuffer getRequestURL() {
-		return super.getRequestURL();
 	}
 
 	@Override
