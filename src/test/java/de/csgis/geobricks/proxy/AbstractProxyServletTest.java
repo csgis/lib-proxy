@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +26,7 @@ public class AbstractProxyServletTest {
 		// Prevent/stub logic in super.method()
 		servlet = spy(new AbstractProxyServlet() {
 			@Override
-			protected String getAuthorizedUser(HttpServletRequest request,
+			protected String getAuthorizedRoles(HttpServletRequest request,
 					HttpServletResponse response) {
 				return null;
 			}
@@ -39,8 +38,13 @@ public class AbstractProxyServletTest {
 			}
 
 			@Override
-			protected Properties getAppProperties() {
-				return new Properties();
+			protected String getHeaderName() {
+				return null;
+			}
+
+			@Override
+			protected String getProxyURL() {
+				return null;
 			}
 		});
 
@@ -66,11 +70,8 @@ public class AbstractProxyServletTest {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 
-		Properties properties = new Properties();
-		properties.put(AbstractProxyServlet.PROP_HEADER_NAME, headerName);
-
-		when(servlet.getAuthorizedUser(request, response)).thenReturn(user);
-		when(servlet.getAppProperties()).thenReturn(properties);
+		when(servlet.getAuthorizedRoles(request, response)).thenReturn(user);
+		when(servlet.getHeaderName()).thenReturn(headerName);
 
 		servlet.service(request, response);
 

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
- * Request wrapper to add custom headers and params. It is also possible to
+ * Request wrapper to add custom headers and parameters. It is also possible to
  * modify the body of the request.
  * 
  * @author vicgonco
