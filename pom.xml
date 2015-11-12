@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.csgis.geobricks</groupId>
 		<artifactId>libs</artifactId>
-		<version>0.7.0</version>
+		<version>0.8-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>lib-proxy</artifactId>
