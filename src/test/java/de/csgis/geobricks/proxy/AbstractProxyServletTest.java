@@ -26,7 +26,7 @@ public class AbstractProxyServletTest {
 		// Prevent/stub logic in super.method()
 		servlet = spy(new AbstractProxyServlet() {
 			@Override
-			protected String getAuthorizedRoles(HttpServletRequest request,
+			protected String getAuthorizedUser(HttpServletRequest request,
 					HttpServletResponse response) {
 				return null;
 			}
@@ -70,7 +70,7 @@ public class AbstractProxyServletTest {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 
-		when(servlet.getAuthorizedRoles(request, response)).thenReturn(user);
+		when(servlet.getAuthorizedUser(request, response)).thenReturn(user);
 		when(servlet.getHeaderName()).thenReturn(headerName);
 
 		servlet.service(request, response);

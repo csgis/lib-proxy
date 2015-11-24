@@ -38,8 +38,8 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String roles = getAuthorizedRoles(req, resp);
-		if (roles != null) {
+		String user = getAuthorizedUser(req, resp);
+		if (user != null) {
 			// We need to set this here so the async Jetty proxy works as
 			// expected. Supposedly it should work simply with async-supported
 			// on web-fragment.xml and Servlet 3.0, but it does not in our
@@ -48,7 +48,7 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 
 			ConfigurableHttpServletRequest wrapper = new ConfigurableHttpServletRequest(
 					req);
-			wrapper.addHeader(getHeaderName(), roles);
+			wrapper.addHeader(getHeaderName(), user);
 			modifyRequest(wrapper, resp);
 
 			doReverseProxy(wrapper, resp);
@@ -90,19 +90,19 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	protected abstract String getHeaderName();
 
 	/**
-	 * Returns the roles for the given HTTP request if authentication is valid.
+	 * Returns the user for the given HTTP request if authentication is valid.
 	 * 
 	 * @param request
 	 *            The HTTP request with the data to check authentication.
 	 * @param response
 	 *            The HTTP response, in case it needs to be modified when
 	 *            checking the authentication (cookies, headers, etc.)
-	 * @return The roles if the request provides valid authentication,
+	 * @return The user if the request provides valid authentication,
 	 *         <code>null</code> otherwise.
 	 * @throws IOException
 	 *             if any I/O error occurs while obtaining the roles.
 	 */
-	protected abstract String getAuthorizedRoles(HttpServletRequest request,
+	protected abstract String getAuthorizedUser(HttpServletRequest request,
 			HttpServletResponse response) throws IOException;
 
 	/**
