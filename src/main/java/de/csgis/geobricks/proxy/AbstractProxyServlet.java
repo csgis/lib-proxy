@@ -38,13 +38,14 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		// We need to set this here so the async Jetty proxy works as
+		// expected. Supposedly it should work simply with async-supported
+		// on web-fragment.xml and Servlet 3.0, but it does not in our
+		// environment.
+		req.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
+
 		String user = getAuthorizedUser(req, resp);
 		if (user != null) {
-			// We need to set this here so the async Jetty proxy works as
-			// expected. Supposedly it should work simply with async-supported
-			// on web-fragment.xml and Servlet 3.0, but it does not in our
-			// environment.
-			req.setAttribute("org.apache.catalina.ASYNC_SUPPORTED", true);
 
 			ConfigurableHttpServletRequest wrapper = new ConfigurableHttpServletRequest(
 					req);
@@ -53,7 +54,7 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 
 			doReverseProxy(wrapper, resp);
 		} else {
-			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			doReverseProxy(req, resp);
 		}
 	}
 
