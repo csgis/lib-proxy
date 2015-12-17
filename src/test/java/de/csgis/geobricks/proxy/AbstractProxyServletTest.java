@@ -1,6 +1,7 @@
 package de.csgis.geobricks.proxy;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -26,7 +27,7 @@ public class AbstractProxyServletTest {
 		// Prevent/stub logic in super.method()
 		servlet = spy(new AbstractProxyServlet() {
 			@Override
-			protected String getAuthorizedRoles(HttpServletRequest request,
+			protected String getAuthorizedUser(HttpServletRequest request,
 					HttpServletResponse response) {
 				return null;
 			}
@@ -53,13 +54,19 @@ public class AbstractProxyServletTest {
 	}
 
 	@Test
-	public void sendErrorIfNotLogged() throws Exception {
+	public void proxyWithoutHeaderIfNotLogged() throws Exception {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 
+		String headerName = "header";
+		when(servlet.getHeaderName()).thenReturn(headerName);
+
 		servlet.service(request, response);
 
-		verify(response).sendError(HttpServletResponse.SC_NOT_FOUND);
+		ArgumentCaptor<HttpServletRequest> req = ArgumentCaptor
+				.forClass(HttpServletRequest.class);
+		verify(servlet).doReverseProxy(req.capture(), eq(response));
+		assertNull(req.getValue().getHeader(headerName));
 	}
 
 	@Test
@@ -70,7 +77,7 @@ public class AbstractProxyServletTest {
 		HttpServletRequest request = mock(HttpServletRequest.class);
 		HttpServletResponse response = mock(HttpServletResponse.class);
 
-		when(servlet.getAuthorizedRoles(request, response)).thenReturn(user);
+		when(servlet.getAuthorizedUser(request, response)).thenReturn(user);
 		when(servlet.getHeaderName()).thenReturn(headerName);
 
 		servlet.service(request, response);
