@@ -29,11 +29,11 @@ public abstract class AbstractProxyServlet extends ProxyServlet {
 	/**
 	 * Property name to use for header name.
 	 */
-	public static final String PROP_HEADER_NAME = "de.csgis.geobricks.login.header_name";
+	public static final String PROP_HEADER_NAME = "de.csgis.geobricks.proxy.header_name";
 	/**
 	 * Property name to use for proxy URL.
 	 */
-	public static final String PROP_PROXY_URL = "de.csgis.geobricks.login.proxy_url";
+	public static final String PROP_PROXY_URL = "de.csgis.geobricks.proxy.proxy_url";
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
