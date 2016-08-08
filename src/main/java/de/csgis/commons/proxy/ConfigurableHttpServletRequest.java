@@ -1,4 +1,4 @@
-package de.csgis.geobricks.proxy;
+package de.csgis.commons.proxy;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

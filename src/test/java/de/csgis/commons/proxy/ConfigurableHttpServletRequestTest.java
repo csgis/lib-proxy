@@ -1,4 +1,4 @@
-package de.csgis.geobricks.proxy;
+package de.csgis.commons.proxy;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.csgis.commons.proxy.ConfigurableHttpServletRequest;
 
 public class ConfigurableHttpServletRequestTest {
 	private HttpServletRequest original;
