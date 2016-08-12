@@ -1,7 +1,10 @@
 language: java
-jdk:
-  - oraclejdk8
+
+notifications:
+  email:
+    recipients:
+      - notify@barbatti.de
+  on_success: always
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
