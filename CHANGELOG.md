@@ -2,6 +2,8 @@
 This project adheres to [semantic versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed SSL support in ConfigurableProxyServlet [2016-09-06]
 
 ## [1.0.1] [2016-08-10]
 ### Changed

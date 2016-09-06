@@ -7,7 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.proxy.ProxyServlet;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 
 public class ConfigurableProxyServlet extends ProxyServlet {
 	private String destinationUri;
@@ -31,6 +33,11 @@ public class ConfigurableProxyServlet extends ProxyServlet {
 			uri += "?" + query;
 		}
 		return URI.create(uri);
+	}
+
+	@Override
+	protected HttpClient newHttpClient() {
+		return new HttpClient(new SslContextFactory());
 	}
 
 	public void setDestinationUri(String destinationUri) {
