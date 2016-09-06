@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.csgis.commons</groupId>
-	<version>1.0.1</version>
+	<version>1.0.2-beta1</version>
 	<artifactId>lib-proxy</artifactId>
 	<name>Proxy Library</name>
 
