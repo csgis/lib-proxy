@@ -15,12 +15,12 @@
 
 	<distributionManagement>
 		<repository>
-			<id>csgis-mvn-releases</id>
-			<url>scpexe://service-aws.csgis.de/mnt/data/mvn/releases</url>
+			<id>geobricks-releases</id>
+			<url>http://service.csgis.de/mvn/repository/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>csgis-mvn-snapshots</id>
-			<url>scpexe://service-aws.csgis.de/mnt/data/mvn/snapshots</url>
+			<id>geobricks-snapshots</id>
+			<url>http://service.csgis.de/mvn/repository/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
